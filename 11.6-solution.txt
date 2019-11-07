@@ -1,0 +1,48 @@
+The intuition for this problem is that we conduct a standard binary search, which can be done in log(h) time (where h is the height of the tree). If k is larger than the node value we traverse the right-side of the tree, otherwise the left.
+
+For every node we travel down:
+
+- If k is equal to the node value, then return the node value for both ceiling and floor.
+- If k is less than the node value, the floor must be at least smaller than the node value.
+- If k is greater than the node value, the ceiling must be at least greater than the node value.
+
+By following this logic, there should be no need to backtrack to find the floor or ceiling, and thus the ceiling and floor can be found in a single traversal.
+
+class Node:
+  def __init__(self, value):
+    self.left = None
+    self.right = None
+    self.value = value
+
+def findCeilingFloor(root_node, k, floor=None, ceil
+ =None):
+  if not root_node:
+    return floor, ceil
+
+  if root_node.value == k:
+    return k, k
+  elif root_node.value < k:
+    return findCeilingFloor(
+      root_node.right, k, root_n
+ ode.value, ceil)
+  else:
+    return findCeilingFloor(
+      root_node.left, k, floor, r
+ oot_node.value)
+
+root = Node(8) 
+root.left = Node(4) 
+root.right = Node(12) 
+  
+root.left.left = Node(2) 
+root.left.right = Node(6) 
+  
+root.right.left = Node(10) 
+root.right.right = Node(14) 
+
+print findCeilingFloor(root, 5)
+# (4, 6)
+
+The time complexity of this algorithm is O(h), where h is the height of the binary sea rch tree (as it is not guaranteed that the search tree is balanced).
+
+The space complexity of this algorithm is O(1) since no extra space is used.
