@@ -1,0 +1,40 @@
+This is a classic case for a recursive solution. For any given tree, its inversion is a tree where its new left subtree is the original right subtree inverted, and the new right subtree is the original left subtree inverted. This is the recurrence relationship, and the base case is simply the NULL node, whose inversion is just NULL.
+
+class Node:
+  def __init__(self, value):
+    self.left = None
+    self.right = None
+    self.value = value
+  def preorder(self):
+    print self.value,
+    if self.left: self.left.preorder()
+    if self.right: self.right.preorder()
+
+def invert(node):
+  if not node:
+    return
+  node
+
+  left = invert(node.left)
+  right = invert(node.right)
+
+  node.left, node.right = right, left
+  return node
+
+root = Node('a') 
+root.left = Node('b') 
+root.right = Node('c') 
+root.left.left = Node('d') 
+root.left.right = Node('e') 
+root.right.left = Node(<
+ /span>'f') 
+
+root.preorder()
+# a b d e c f 
+print "\n"
+invert(root)
+root.preorder()
+# a c f b e d
+
+The time complexity of this solution is O(N) because we touch every node in the tree once.
+The space-complexity is also O(N) because the recursion stack can grow to the size of the tree, if the tree doesn't branch. (Often, the best way to understand the worse-case scenario for a tree is to imagine if the tree were not properly balanced.)
