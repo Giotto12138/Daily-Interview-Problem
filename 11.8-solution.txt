@@ -1,0 +1,41 @@
+The regular operations of a stack are relatively trivial to implement. Push and pop can simply be implemented as append and pop using a typical list.
+
+To get the maximum value in the stack in constant time requires some additional thought. Without the time constraint, we could use a naive approach where we simply pop everything from the stack to determine the maximum, and then push everything back on. However, this is linear time.
+
+For a constant time solution, one approach is to use an additional stack which will always have the same number of elements as the actual stack, but will instead hold the maximum value in the stack at any point. To implement this, when pushing to the stack, we check if the new value is greater than the top value in the maximum stack. If it is, then we will push this new value to the stack, otherwise, push the previous max (current top of maximum stack). When performing a pop, we simply pop from both stacks. The maximum at any point is s imply whatever is at the top of the max stack.
+
+class MaxStack:
+  def __init__(self):
+    self.stack = []
+    self.maxes = []
+
+  def push(self, val):
+    self.stack.append(val)
+    if self.maxes:
+      self.maxes.append(max(val, self.maxes[-1]))
+    else:
+      self.maxes.append(val)
+
+  def pop(self):
+    if self.maxes:
+      self.maxes.pop()
+    return self.stack.pop()
+
+  def max(sel
+ f):
+    return self.maxes[-1]
+
+s = MaxStack()
+s.push(1)
+s.push(2)
+s.push(3)
+s.push(2)
+print<
+ /span> s.max()
+# 3
+s.pop()
+s.pop()
+print s.max()
+# 2
+
+Time-co mplexity is O(1), since each operation is only affecting a single element (the last element in the array). The space complexity is O(2*n) or linear, due to having two arrays.
