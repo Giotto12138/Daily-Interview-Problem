@@ -1,0 +1,17 @@
+This problem was recently asked by LinkedIn:
+
+By the way, check out our NEW project AlgoPro (http://algopro.com) for over 60+ video coding sessions with ex-Google/ex-Facebook engineers.
+
+You are given a positive integer N which represents the number of steps in a staircase. You can either climb 1 or 2 steps at a time. Write a function that returns the number of unique ways to climb the stairs.
+
+def staircase(n):
+  # Fill this in.
+  
+print staircase(4)
+# 5
+print staircase(5)
+# 8
+
+Can you find a solution in O(n) time?
+
+Upgrade to PRO and get in-depth solutions to every problem from ex-Google and ex-Facebook engineers TechLead and Joma.
