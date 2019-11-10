@@ -1,0 +1,25 @@
+It is useful to understand that to get to step # N, you can either climb 1 step from step # N-1 or 2 steps from step # N-2. That is, staircase(n) = staircase(n-1) + staircase(n-2). This is just the Fibonacci sequence. One solution then is to just solve the problem recursively.
+
+def staircase(n):
+  if n <= 1:
+    return 1
+  return staircase(n - 1) + staircase(n - 2)
+
+However, this is quite slow as it has a runtime of O(2^N) - the reason is that for each step N, you have two choices (either 1 or 2 steps). So the total number of permutations here is 2 * 2 * 2 * 2 * ... The next step in optimizing this involves realizing that we are doing a lot of computations repeatedly. Instead, we can do the computations iteratively from the bottom up.
+
+def staircase2(n):
+  # Creates list res with all elements 0 
+  res = [0 for x in range(n + 1)]
+  res[0], res[1] = 1,1
+    
+  for i in range(2,n + 1): 
+    j = 1
+    while j<=2 and j<=i: 
+      res[i] = res[i] + res[i-j] 
+      j = j + 1 
+  return res[n] 
+
+print<
+ /span> staircase2(5)
+
+This now has a time complexity of O(N) with the single pass iteration, and a constant space complexity of O(n) for building the array res of size n.
