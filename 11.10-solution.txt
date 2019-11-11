@@ -1,0 +1,18 @@
+A brute force solution would require 3 nested for loops to test every combination with 3 variables. However upon closer inspection, we can see that by creating a set of squares of all nums, we can search combinations for just 2 numbers (a and b) instead and see if the sum exists.
+
+def findPythagoreanTriplets(nums):
+  squares = <
+ span style="color: #204a87">set([n**2 for n in nums])
+
+  for a in nums:
+    for b in nums:
+      if a**2 + b**2 in squares:
+        return True
+  return False
+
+print findPythagoreanTriplets([3, 12, 5, 13])
+# True
+
+The time complexity for this problem is O(n^2), since we have a loop nested in another loop, where each iterates through the list.
+
+The space complexity would also be O(n), since a set needs to be created to search if the sum of squares exists.
