@@ -1,0 +1,49 @@
+This problem can be solved recursively. If we look the solution path of the example (biting -> siting -> sitting), we can observe that the total edit distance is the edit distance between siting and sitting plus one. As a result, we can define the recurrence algorithm like this:
+
+1. If either strings are empty, then return the size of the non empty string (we need to insert all those characters).
+2. Otherwise, return one plus the minimum of edit distance after a removal, insertion, or substitution of the last character in string 1.
+
+def distance(s1, s2):
+  if len(s1) == 0 or len(s
+ 2) == 0:
+    return max(len(s1), len(s2))
+
+  return min(distance(s1[1:], s2) + 1,
+         distance(s1, s2[1:]) + 1,
+         distance(s1[1:], s2[1:]) if s1[0] == s2[0]
+         else distance(s1[1:], s2[1:]) + 1)
+         
+print distance('biting', 'sitting')
+# 2
+
+However, this solution is very slow due to repeated computation. This is cue that we can probably make it faster using dynamic programming. We create a 2D cache where index(i, j) represents the edit distance between s1[:1] and s2[:j]. Once the table is filled, simply return the value at index(-1, -1).
+
+def distance(s1, s2):
+  x = len(s1) + 1 # the length of the x-coordinate
+  y = len(s2) + 1 # the length of the y-coordinate
+
+  A = [[-1 for i in range(x)] for j in range(y)]
+  for i in range(x):
+    A[0][i] = i
+
+  for j in range(y):
+    A[j][0] = j
+
+  for i in range(1, y):
+    for j in range(1, x):
+      if s1[j- 1] == s2[i - 1]:
+        A[i][j] = A[i - 1][j - 1]
+      else:
+        A[i][j] = min(
+            A[i - 1][j] + 1,
+            A[i][
+ j - 1] + 1,
+            A[i - 1][j - 1] + 1
+            )
+  return A[y - 1][x - 1] # return the edit distance between the two strings
+
+print distance(
+ 9;biting', 'sitting')
+# 2
+
+Now, this solution has both a time and space complexity of O(M*N) for populating the 2D cache.
