@@ -1,0 +1,41 @@
+Given that the expression is properly formed, we can iterate through each and determine the actions to do depending on which character we see. The 2 main things we need to keep track of is:
+
+- The current total
+- The operation to be operated for the next integer (or bracket)
+
+So if we see a + or -, we can safely save that into the op variable.
+If we see a digit, similarly, we can add or subtract accordingly.
+If we see an open bracket, some special work needs to be done. A recursive eval call should be done, and should start processing after where the bracket starts. This can be solved by also passing in the index of where to start processing in the expression.
+If we see an end bracket, we can simply return our results. We need to also return which index we have processed up to, so the parent eval function knows where to continue off.
+
+def eval_helper(expression, index = 0):
+  result = 0
+  op = '+'
+  while index < len(expression):
+    char = expression[index]
+    if char.isdigit():
+      if op == '+':
+        result += int(char)
+      else:
+        result -= int(char)
+    elif char in ('+', '-'):
+      op = char
+    elif char == '(':
+      n, index = eval_helper(expression, index + 1)
+      if op == '+':
+        result += n
+      
+ else:
+        result -= n
+    elif char == ')':
+      return (result, index)
+    index += 1
+  return (result, index)
+
+def eval(expression):
+  return eval_helper(expression)[0]
+
+print eval('- (3 + ( 2 - 1 ) )')
+# -4
+
+The time complexity of this solution is O(n) since each character in the string is iterated through once. The space complexity is actually O(n), as for every recursive call some space is used on the stack, and the brackets can be nested proportionally to the length of the string.
