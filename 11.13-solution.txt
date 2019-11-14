@@ -1,0 +1,47 @@
+We can keep track of the 2 unique numbers, and if the next number is not one of the 2 numbers, we can swap one of the 2 unique numbers to the new number, while resetting the length count.
+
+How we pick which one of the 2 unique numbers to swap out is to keep track of the last number that showed up before, and count the number of times that number has showed up in a continuous sequence.
+
+For example, given the sequence:
+[3, 3, 1, 1, 5, ...]
+At index 4, we see a number 5 which is different than the two unique numbers 3 and 1. The last number we have seen is 1, and it has appeared twice so far. Thus the sequence length at index 4 is 3, which is not the longest (index 3 has a length of 4 with [3, 3, 1, 1])
+
+Keeping track of the above factors, we can iterate through the array in a single pass to calculate the maximum length that has appeared so far.
+
+def findSequence(seq):
+  if len(seq) < 2:
+    retur
+ n len(seq)
+
+  a, b = seq[0], seq[1]
+
+  last_num = b
+  last_num_count = 1 if (a == b) else 0
+  length = 1
+  max_length = 1
+
+  for n in seq[1:]:
+    if n in (a, b):
+      length += 1
+      if b == n:
+        last_num_count += 1
+      else:
+        last_num = a
+        last_num_count = 1
+    else:
+      a = last_num
+      b = n
+      last_num = b
+      length = last_num_count + 1
+      last_num_count = 1
+    max_length = max(length, max_length)
+  return max_length
+
+
+print(findSequence([1, 3, 5, 3, <
+ span style="color: #0000cf; font-weight: bold">1, 3, 1, 5]))
+# 4
+print(findSequence([1, 1, 3, 3, 4, 4]))
+# 4
+
+The time complexity of this problem is O(n) since the sequence is traversed once. The space complexity is O(1) since only a few variables are used.
