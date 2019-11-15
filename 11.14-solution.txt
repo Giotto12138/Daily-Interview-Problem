@@ -1,0 +1,34 @@
+By using one of the graph traversal algorithms (DFS or BFS), we can determine if a node has been visited already by keeping track of the nodes that we have visited, while traversing through all edges. A recursive approach has been taken here (which is DFS), where for every node we check every edge and if we do not traverse any node that has been marked, there is no cycle.
+
+def find_cycle(graph):
+  visited = {}
+  for vertex in graph.keys():
+    if not vertex in visited:
+      if find(graph[vertex], vertex, visited):
+        return True
+  return False
+  
+def find(graph, vertex, visited):
+  if vertex in visited:
+    return True
+  visited[vertex] = True
+  for n in graph:
+    if find
+ (graph[n], n, visited):
+      return True
+  return False
+
+graph = {
+  'a': {'a2':{}, 'a3':{} },
+  'b': {'b2':{}},
+  'c': {}
+}
+print find_cycle(graph)
+# False
+graph['c'] = graph
+print find_cycle(graph)
+# True
+
+The time complexity for this solution is linear O(n) since in the worse case we will need to traverse the entire graph searching for a cyclic no de.
+
+The space complexity for this solution is linear as well, since we store the visited variable for nodes we've seen. This can grow to size O(n). There is also the recursive stack space, which can also grow to linear size.
