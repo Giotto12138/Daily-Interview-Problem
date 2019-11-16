@@ -1,0 +1,72 @@
+The straightforward solution is to simply iterate through each entry in the matrix, and create a word left-to-right starting at the index, and up-to-down, using splicing to grab the appropriate length. If either of those match the target word, return true, otherwise proceed to the next entry.
+
+def word_search(matrix, word):
+  for r in range(len(matrix)):
+    for c in range(len(matrix[0])):
+      word_right = build_word_right(matrix, r, c, len(word))
+      word_down = build_word_down(matrix, r, c, len(word))
+      if word in (word_right, word_down):
+        return True
+  return False
+
+def build_word_right(matrix, r, c, length):
+  return ''.join([matrix[r][i] for i in range(c, len(matrix[0]))])[:length]
+
+def build_word_down(matrix, r, c, length):
+  return ''.join([matrix[i][c] for i in range(r, len(matrix))])[:length]
+
+matrix = [
+  ['F', 'A
+ 9;, 'C', 'I'],
+  ['O', 'B', 'Q', 'P'],
+  ['A', 'N', 'O', 'B'],
+  ['M', 'A', 'S', 'S']]
+print word_search(matrix, 'FOAM')
+# True
+
+The problem with this approach is that we are grabbing the entire column/row and then splicing it for what is potentially a short word. This is very expensive if the matrix is very large. The first optimization we can make is to simply construct the word up to the minimum of the length of the word, and the end of the row/column. However, this is still not optimal. Intuitively, if we notice that the words stop matching in the first few letters, we don't even need to proceed with constructing the rest of the word and we can just quit the search early.
+
+
+ def word_search(matrix, word):
+  for r, row in enumerate(matrix):
+    for c, val in enumerate(row):
+      if check_word_right(matrix, r, c, word):
+        return True
+      if check_word_down(matrix, r, c, word):
+        return True
+  return False
+
+def check_word_right(matrix, r, c, word):
+  word_len = len(word)
+  row_len = len(matrix[0])
+  
+ if word_len != row_len - c:
+    return False
+  for c1, c2 in zip(word, (matrix[r][i] for i in range(c, row_len))):
+    if c1 != c2:
+      return False
+  return True
+
+def check_word_down(matrix, r, c, word):
+  word_len = len(word)
+  col_len = len(matrix)
+  if word_len != col_len - r:
+    return False
+  for c1, c2 in zip(word, (matrix[i][c] for i in range(r, col_len))):
+    if c1 != c2:
+      return False
+  return True
+
+  return ''.join([matrix[i][c] for i in range(r, min(col_len, length))])
+  
+matrix = [
+  ['F', 'A', 'C', 'I'],
+  ['O', 'B', 'Q', 'P'],
+  [
+ 'A', 'N', 'O', 'B'],
+  ['M', 'A', 'S', 'S']]
+print w
+ ord_search(matrix, 'FOAM')
+# True
+
+The time complexity of this solution is O(N x M x k) where k is the length of the target word. This is because in the worst case, we are iterating through the entire 2D array which is N*M, and then constructing and checking for a match with the target word of length k.
