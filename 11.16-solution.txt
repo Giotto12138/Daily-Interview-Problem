@@ -1,0 +1,53 @@
+The brute force solution runs in O(n^3) time in which we:
+- Iterate through all elements in the array.
+   - For each element i, iterate j from i to the end.
+       - For each i...j, sum up the elements and compare
+          values for the smallest.
+class Solution:
+    def minSubArrayLen(self<
+ span style="color: #000000; font-weight: bold">, nums, s):
+        temp = []
+        for i in range(len(nums)):
+            for j in range(len(nums)):
+                if sum(nums[i:j+1]) >= s:
+                    temp.append(len(nums[i:j+1]))
+
+        if temp:
+            return min(temp)
+
+        return 0
+
+print Solution().minSubArrayLen([2, 3, 1, 2, 4, 3], 7)
+# 2
+
+The key insight here is that these numbers are positive. We can use a sliding window approach, in which we track a left and right index. We slide the right index forward until the sum becomes too large. Then we slide the left pointer forward until we reach the end.
+
+class Solution:
+  def minSubArrayLen(self, nums, s):
+    l, r = 0, -1
+    sum = 0
+    res = len(nums) + 1
+    while(l < len(nums)):
+      if (sum < s) and (r + 1 < len(nums)):
+        # if sum is smaller, keep moving right index to increase window
+        r += 1
+        sum += nums[r]
+      else:
+        # if sum >= s, move left index to s
+ hrink window
+        sum -= nums[l]
+        l += 1
+
+      if sum >= s:
+        # if sum is found
+        res = min(res, r - l + 1)
+    if(res == len(nums) + 1):
+      # if no solution is found
+      return 0
+    return res
+
+print Solution().minSubArrayLen([2, 3, 1, 2, 4, 3], 7)
+# 2
+
+This algorithm runs in linear time, since both pointers are always moving forward.
+Space is constant O(1) since we are not allocating anything more than a few variables.
