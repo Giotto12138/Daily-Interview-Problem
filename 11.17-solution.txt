@@ -1,0 +1,29 @@
+The key observation required to solve this problem is to realize that to get to any cell, you could've come either from the cell to the left, or the cell above (unless the current cell is at the edge of the grid). This is a classic case for a recursive algorithm:
+
+The number of ways to get to the bottom right of a grid with dimensions n, m: f(n, m) = f(n-1, m) + f(n, m-1). If either n or m is equal to 1, simply return 1 since you could've only come from one direction.
+
+def num_ways(n, m):
+  if n == 1 or m == 1:
+    return 1
+  return num_ways(n - 1, m) + num_ways(n, m - 1)
+
+print num_ways(2, 2)
+# 2
+
+Recall that this problem is very similar to the classic staircase problem, and has many repeated computations. This is a great use case for dynamic programming. We will use an N by M grid and index i, j will represent the number of ways we can get to that index from the top left. We will iteratively fill up this matrix using the recurrence relationship, and then return the bottom-right value at the end.
+
+def num_ways(n, m):
+  A = [[0 for _ in range(m)] for _ in range(n)]
+  for i in range(n):
+    A[i][0] = 1
+  for j in range(m):
+    A[0][j] = 1
+  for i in range(1, n):
+    for j in range(1, m):
+      A[i][j] = A[i - 1][j] + A[i][j - 1]
+  return A[-1][-1]
+
+print num_ways(2, 2)
+# 2
+
+The time complexity of this solution is O(N * M) for filling up the 2D cache, and likewise, the space complexity is also O(N * M).
