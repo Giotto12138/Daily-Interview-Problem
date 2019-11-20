@@ -1,0 +1,46 @@
+A solution for this problem is to iterate through this in 2 pass.
+
+The first pass traverses from left to right, calculating the force on each position pushing towards the right. The force decreases by 1 at each iteration.
+
+The second pass traverses from right to left, calculating the force on each position pushing leftwards. This force is also added to each position.
+
+In a final iteration, we check the force one each position and determine whether the domino is standing, tilted left, or tilted right.
+
+class Solution(object
+ ):
+  def pushDominoes(self, dominoes):
+    N = len(dominoes)
+    force = [0] * N
+
+    # Populate forces going from left to right
+    f = 0
+    for i in range(N):
+      if dominoes[i] =
+ = 'R': f = N
+      elif dominoes[i] == 'L': f = 0
+      else: f = max(f-1, 0)
+      force[i] += f
+
+    # Populate forces going from right to left
+    f = 0
+    for i in range(N-1, -1, -1):
+      if dominoes[i] == 'L': f = N
+      elif dominoes[i] == 'R': f = 0
+      else: f = max(f-1, 0)
+      force[i] -= f
+
+    result = ''
+    for f in force:
+      if f == 0:
+        result += '.'
+      elif f > 0:
+        result += 'R'
+      else:
+        result += 'L'
+    return result
+
+print Solution().pushDominoes('..R...L..R.')
+# ..RR.LL..RR
+
+The time complexity of this solution is O(n), since only a 2 pass is done.
+The space complexity is O(n) as extra space is used to store the state of the dominos that fell over.
