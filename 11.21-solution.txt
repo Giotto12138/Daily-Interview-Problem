@@ -1,0 +1,40 @@
+Without the single pass constraint, the obvious solution would be to make a pass of the linked list to determine its length. Then simply subtract k from the length to determine which node from the start to remove. Then, in the second pass, remove that node.
+
+To account for the single pass constraint, we can use a trick to figure out which node to remove. We use a fast and slow pointer approach. Initialize both to be at head, then move the fast pointer forward by k. Then, keep moving both of them forward together until the fast pointer reaches the end of this list. At this point, the slow pointer would be at the k-th node from the end, since it was k nodes behind fast. Then, simply remove that node.
+
+class Node:
+  def __init__(self, val, next=None):
+    self.val = val
+    self.next = next
+  def __str__(self):
+    current_node = self
+    result = []
+    while current_node:
+      result.append(current_node.val)
+      current_node = current_node.next
+    return str(result)
+
+def remove_kth_from_linked_list(head, k):
+  slow, fast = head, head
+  for i in range(k):
+    fast = fast.next
+
+  prev = None
+  while fast:
+    prev = slow
+    slow = slow.next
+    fast = fast.next
+  if not prev:
+    return slow.next
+  prev.next = slow.next
+  return head
+
+head = Node(1, Node(2, Node(3, Node(4<
+ /span>, Node(5)))))
+print(head)
+# [1, 2, 3, 4, 5]
+head = remove_kth_from_linked_list(head, 3)
+print(head)
+# [1, 2, 4, 5]
+
+This is in O(n) time in a single pass, with constant space.
