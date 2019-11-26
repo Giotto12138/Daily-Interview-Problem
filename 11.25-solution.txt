@@ -1,0 +1,60 @@
+The brute force solution would be to sort the list in O(n*logn) time, and then iterate through the last k elements. However, we can do better.
+
+Using a heap, we can keep a heap of size k while we process the whole list, which allows us to get the kth largest element by popping the heap after we finish processing the list. Python has a function called nlargest which does this exact algorithm.
+
+import heapq
+
+def findKthLargest(nums, k):
+  return heapq.nlargest(k, nums)[-1]
+
+print findKthLargest([3, 5, 2, 4, 6, 8], 3)
+# 5
+
+The time complexity of this problem is O(n) to build the heap (heaps can be built in O(n) time due to asymptotic behavior). In addition, we need to pop k elements, an operation that requires log(n) time to sift the heap each time, so the total time is O(n) + O(k*logn).
+
+The space complexity of this problem would also be O(n), the size of the heap.
+
+Solution 2:
+
+A faster solution is to use an algorithm called QuickSelect. QuickSelect is very similar to QuickSort, but instead of partitioning both sides of the list, only one side is partioned depending on where the pivot is. If the pivot is at the index len(nums)-k then we have found the k-th largest eleme nt.
+
+import random 
+
+def findKthLargest(nums, k):
+  def select(lst, l, r, index):
+    if r == l:
+      return lst[l]
+
+    pivot_index = random.rand
+ int(l, r)
+    # move pivot to beginning of list
+    lst[l], lst[pivot_index] = lst[pivot_index], lst[l]
+
+    # partition
+    i = l
+    for j in xrange(l+1, r+1):
+      if lst[j] < lst[l]:
+        i += 1
+        lst[i], lst[j] = lst[j], lst[i]
+
+    # move pivot to correct location
+    lst[i], lst[l] = lst[l], lst[i]
+
+    # recursively partition one side only
+    if index == i:
+      return lst[i]
+    elif index < i:
+      return select(lst, l, i-1, index)
+    else:
+      return select(lst, i+1, r, index)
+
+  return select(nums, 0, len(nums) - 1, k)
+
+print findKthLargest([3, 5, 2, 4, 6, 8], 3)
+# 5
+
+Quickselect uses the same overall approach as quicksort, choosing one element as a pivot and partitioning the data in two based on the pivot, accordingly as less than or greater than the pivot. However, instead of recursing into both sides, as in quicksort, quickselect only recurses into one side â€“ the side with the element it is searching for. It is like n + 1/2n + 1/4n + 1/8*n + ...This reduces the average complexity from O(n * logn) to O(n), with a worst case of O(n^2) if the pivot is chosen to be the minimum (or maximum) element each iteration.
+
+For the recursive implementation, the space complexity is the same as the recursion depth -- this would be O(log*n) in the average case, since we split the list in half each time.
+
+* Note that QuickSelect is very tricky to write in an interview. It may not be necessary to actually write it, and you may want to only tackle this if there is sufficient time. Simply mentioning it may be sufficient.
