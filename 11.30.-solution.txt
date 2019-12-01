@@ -1,0 +1,32 @@
+Recall that a stack follows that opposite protocol of a queue. It supports last in = first out. To simulate the behaviour of a queue, we can first empty the stack with the elements into the other stack, and then pop from the second stack (this mimics FIFO).
+
+class Queue:
+  def __init__(self):
+    self.s1 = []
+    self.s2 = []
+
+  def enqueue(self, val):
+    self.s1.app
+ end(val)
+
+  def dequeue(self):
+    if self.s2:
+      return self.s2.pop()
+    if self.s1:
+      # empty all of s1 into s2
+      while self.s1:
+        self.s2.append(s
+ elf.s1.pop())
+      return self.s2.pop()
+    return None
+
+q = Queue()
+q.enqueue(1)
+q.enqueue(2)
+q.enqueue(3)
+print q.dequeue()
+print q.dequeue()
+print q.dequeue()
+# 1 2 3
+
+In a standard queue, both the enqueue and dequeue operations run in constant time. However, in this two stack implementation, only the enqueue function is constant time. The dequeue method has a time complexity of O(N) since we may need to empty stack 1 in to stack 2 prior to popping.
