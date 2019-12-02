@@ -1,0 +1,27 @@
+The naive approach to this problem would be to determine all contiguous subarrays, calculate their sums, and return the largest one.
+
+def max_subarray_sum(arr):
+  current_max = 0
+  for i in range(len(arr)):
+    for j in range(i, len(arr) + 1):
+      current_max = max(current_max, sum(arr[i:j]))
+  return current_max
+
+print max_subarray_sum([34, -50, 42, 14, -5, 86])
+# 137
+
+However, this has a time complexity of O(N^3) as it requires a nested loop for determining the start and end of the contiguous arrays, and then for each contiguous subarray, we must calculate the sum.
+
+The optimal solution can be determined by asking the question, "what is the sum of the best contiguous subarray ending at the current index?". As we iterate through the array, we keep track of 2 values: the max_so_far (max sum of all contiguous subarrays considered thus far), and max_ending_here (the sum of the best contiguous subarray ending at the current index). The idea is simple: max_ending_here is either the previous max_ending_here (maximum ending at the previous index) plus the current value, or simply the current value. Then if max_ending _here is greater than max_so_far, we simply update max_so_far to be max_ending_here.
+
+def max_subarray_sum(arr):
+  max_ending_here = max_so_far = 0
+  for x in arr:
+    max_ending_here = max(x, max_ending_here + x)
+    max_so_far = max(max_so_far, max_ending_here)
+  return max_so_far
+
+print max_subarray_sum([34, -50, 42, 14, -5, 86])
+# 137
+
+The time complexity of this solution is O(N) as it requires a single pass of the array. Space complexity is constant, since we're only using 2 additional variables.
