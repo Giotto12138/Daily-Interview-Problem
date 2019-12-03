@@ -1,0 +1,71 @@
+The naive solution to this problem is to simply iterate through all the linked lists and collect all the values in an array. Then, simply sort the array, and create a linked list from the sorted array.
+
+class Node(object):
+  def __init__(self, val, next=None):
+    self.val = val
+    self.next = next
+
+  def __str__(self):
+    c = self
+    answer = ""
+    while c:
+      answer += str(c.val) if c.val else ""
+      c = c.next
+    return answer
+
+def merge(lists):
+    # Combine all nodes into an array
+  arr = []
+  for head in lists:
+    current = head
+    while current:
+      arr.append(current.val)
+      current = current.next
+  new_head = current = Node(-1)  # dummy head
+  for val in sorted(arr):
+    current.next = Node(val)
+    current = current.next
+  return new_head.next
+
+a = Node(1, Node(3, Node(5)))
+b = Node(2, Node(4, Node(6)))
+print merge([a, b])
+# 123456
+
+This has a time complexity of O((nk) * log(nk)) due to the sort, where n is the number of elements and k is the number of lists. It has a space complexity of O(kn) for storing all the values in the array.
+
+However, with this approach we are not leveraging the fact that each linked list is sorted. A slightly more optimal solution is to maintain a pointer for each linked list that indicates where we are in that list. Then each time, simply find the minimum value from all the pointers and add that to our output linked list, and advance that pointer.
+
+def merge(lists):
+  new_head = current = Node(-1)
+  while any(lst is not None for lst in lists):
+    # Get min of all non-None lists
+    current_min, i = min((lst.val, i)
+                         for i, lst in enumerate(lists) if lst is not None)
+    lists[i] = lists[i].next
+    current.next = Node(current_min)
+    current = current.next
+  return new_head.next
+
+This solution has a time complexity of O(kn * k), since we iterate through k*n elements, and perform k comparisons at each iteration.
+
+The most optimal solution involves the use of a minheap for the pointers, keyed by the value that the pointer points to. This removes the need to manually find the next smallest element each time. We simply grab the element at the top of the heap, and advance the corresponding pointer and add the new value to the heap.
+
+def merge(lists):
+  new_head = current = Node(-1)
+  heap = [(lst.val, i) for i, lst in enumerate(lists)]
+  heapq.heapify(heap)
+  wh
+ ile heap:
+    current_min, i = heapq.heappop(heap)
+    # Add next min to merged linked list.
+    current.next = Node(current_min)
+    current = current.next
+    # Add next value to heap.
+    if lists[i] is not None:
+      lists[i] = lists[i].next
+      if lists[i]:
+        heapq.heappush(heap, (lists[i].val, i))
+  return new_head.next
+
+This reduces the time complexity to O(kn * logk), since inserting into a heap is l og(k), and we do this for each element. The space complexity is O(K).
