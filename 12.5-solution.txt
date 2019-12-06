@@ -1,0 +1,38 @@
+This problem requires mostly studying the structure of this space and enumerating the cases, breaking them down one by one.
+
+- If the lengths differ, return False.
+- If the strings are the same with duplicate characters, return True.
+- Count the number of different characters. If the count is not 2, return False.
+- If the characters are equal to each other swapped, then return True.
+
+class Solution:
+  def buddyStrings(self, A, B):
+    if len(A) != len(B):
+      return False
+
+    if A == B and len(A) > len(set(A)):
+      return True
+
+    diffa = []
+    diffb = []
+    for i in range(len(A)):
+      if len(diffa) > 2:
+  
+       return False
+      if A[i] != B[i]:
+        diffa += A[i]
+        diffb += B[i]
+    if len(diffa) != 2:
+      return False
+    if diffa[0] == diffb[1] and diffa[1] == diffb[0]:
+      return True
+
+    return False
+
+print Solution().buddyStrings('aaaaaaabc', 'aaaaaaacb')
+# True
+print Solution().buddyStrings('aaaaaabbc', 'aaaaaaacb')
+# False
+
+The time complexity is linear O(n), as we iterate through the length of the string.
+Space complexity is constant, since we only allocate an array that can grow to max size 2.
