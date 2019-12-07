@@ -1,0 +1,42 @@
+This is a classic case for a recursive solution. To determine whether the deepest node is in the left or right subtree, we simply need to know which subtree has the greater depth. However, the problem asks to return the node, and not the depth, so we cannot directly use the result of computing the depth. Instead, along with the depth, we will also attach the node corresponding to that depth. Then for any given node, to get the deepest node from it, we compare the depth of the left and right subtree and take the node corresponding to the larger value.
+
+class Node(object):
+  def __init__(self, val):
+    self.val = val
+    self.left = None
+    self.right = None
+
+  def __repr__(self):
+    # string representation
+    return self.val
+
+
+def deepest(node):
+  if node and not node.left and not node.right:
+    return (node, 1)  # Leaf and its depth
+
+  if not node.left:  # Then the deepest node is on the right subtree
+    return increment_depth(deepest(node.right))
+  elif not node.right:  # Then the deepest node is on the left subtree
+    return increment_depth(deepest(node.left))
+
+  return increment_depth(
+      max(deepest(node.left),
+          deepest(node.right),
+          key=lambda x: x[1]))  # Pick higher depth tuple and increment depth
+
+
+def increment_depth(node_depth_tuple):
+  node, depth = node_depth_tuple
+  return (node, depth + 1)
+
+
+root = Node('a')
+root.left = Node('b')
+root.left.left = Node('d')
+root.right = Node('c')
+
+print deepest(root)
+# (d, 3)
+
+This algorithm has a time complexity of O(N) as we need to check all the nodes of the tree. It has a space complexity of O(logN) because that is the max depth of the recursion call stack at any given time.
