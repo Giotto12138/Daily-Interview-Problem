@@ -1,0 +1,34 @@
+A naive solution is to first sort the array, while removing negative numbers. Then, simply iterate over the array and return the first element that doesn't match its index. However, the time complexity of this solution is O(n*log(n)) (sorting complexity for mergesort or heapsort, or quicksort on average).
+
+To come up with a better solution, it is important to realize that the first missing number must be between 1 and len(array) + 1. A linear time solution is to traverse the array, and swap any element between 0 and the length of the array to its index. Stay at each index until we find that index's value. Once this process is done, simply iterate through the array and return the index of the first number that doesn't match its index.
+
+def first_missing_positive(nums):
+  if not nums:
+    return 1
+  for i, num in enumerate(nums):
+    while i + 1 != nums[i] and 0 < nums[i] <= len(nums):
+      v = nums[i]
+      nums[i], nums[v - 1] = nums[v - 1], nums[i]
+      if nums[i] == nums[v - 1]:
+        break
+  for i, num in enumerate(nums, 1):
+    if num != i:
+      return i
+  return len(nums) + 1
+
+print first_missing_positive([3, 4, -1, 1])
+# 2
+
+A second linear time solution is to create a set from the array elements. Then, initialize a counter to 1, and keep incrementing it by 1 till it reaches a value that does not exist in the set , and return that value.
+
+def first_missing_positive(nums):
+  s = set(nums)
+  i = 1
+  while i in s:
+    i += 1
+  return i
+
+print first_missing_positive([3, 4, -1, 1])
+# 2
+
+Although this solution also has a time complexity of O(N), it requires O(N) space as well, whereas the previous solution had a constant space complexity.
