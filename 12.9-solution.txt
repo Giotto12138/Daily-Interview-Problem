@@ -1,0 +1,36 @@
+The first step to arriving at the solution is to realize that a BST is valid if and only if its left subtree is a valid BST, its right subtree is a valid BST, all values in the left subtree are less than or equal to the root, and all values in the right subtree are greater than or equal to the root.
+
+The substructure property of this problem means that the solution can be done recursively. Let's construct the recursive algorithm step by step.
+
+A tree with just one node is a valid BST regardless of the value of the node. For a tree with more than one node, the root can take any value. Then, as we go down the BST, the range of valid values for the nodes shrinks. For example, if we go to the left of the root, the maximum value of any node from that point down must be the value of the root. Likewise, if we go to the right of the root, the minimum value of any node from that point down must be the value of the root.
+
+Using this approach, we can simply pass the lower and upper bound of valid values in our recursive function to validate each node.
+
+class TreeNode:
+  def __init__(self, key):
+    self.left = None
+    self.right = None
+    self.key = key
+
+def is_bst(root):
+  def is_bst_helper(root, min_key, max_key):
+    if root is None:
+      return True
+    if root.key <= min_key or root.key >= max_key:
+      return False
+    return (is_bst_helper(root.left, min_key, 
+ root.key) and
+            is_bst_helper(root.right, root.key, max_key))
+
+  return is_bst_helper(root, float('-inf'), float('inf'))
+
+a = TreeNode(5)
+a.left = TreeNode(3)
+a.right = TreeNode(7)
+a.left.left = TreeNod
+ e(1)
+a.left.right = TreeNode(4)
+a.right.left = TreeNode(6)
+print is_bst(a)
+
+The solution has a time complexity of O(N) since we need to iterate through every node in the tree in the worst case. Space complexity is also O(n) due to the recursive call-stack being created at max length to be the total number of nodes.
