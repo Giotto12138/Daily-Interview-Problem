@@ -1,0 +1,37 @@
+The values can be retrieved recursively by checking the height at every recursive call, if it is equal to 1 then the value at that level should be returned. If the height is greater than 1 at that recursive call, then we need to search deeper, so recursively call for the left and right child nodes, and combine the results.
+
+class Node():
+  def __init__(self, value, left=None, right=None):
+    self.value = value
+    self.left = left
+    self.right = right
+
+def valuesAtHeight(root, height):
+  if root == None:
+    return []
+  if
+  height == 1:
+    return [root.value]
+
+  leftNodeValues = valuesAtHeight(root.left, hei
+ ght - 1)
+  rightNodeValues = valuesAtHeight(root.right, height - 1)
+
+  return leftNodeValues + rightNodeValues
+
+#     1
+#    / \
+#   2   3
+#  / \   \
+# 4   5   7
+a = Node(1)
+a.left = Node(
+ 2)
+a.right = Node(3)
+a.left.left = Node(4)
+a.left.right = Node(5)
+a.right.right = Node(7)
+print valuesAtHeight(a, 3)
+# [4, 5, 7]
+
+The time complexity for this solution is O(n) since each node is traversed at most once. The space complexity is O(n), since the recursion can reach an iteration depth of O(n).
