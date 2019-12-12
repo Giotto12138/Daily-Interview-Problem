@@ -1,0 +1,44 @@
+The brute force solution to this problem is to get every possible substring of s, and check how many distinct characters it contains. While doing this, keep track of the longest substring that has at most k distinct characters and return it at the end. However, this is quite slow. It has a time complexity of O(n^2) for generating the substrings beginning/ending at each character.
+
+def longest_substring_with_k_distinct_characters(s, k):
+  current_longest_substring = ''
+  for i in range(len(s)):
+    for j in range(i + 1, len(s) + 1):
+      substring = s[i:j]
+      if len<
+ /span>(set(substring)) <= k and len(substring) > len(current_longest_substring):
+        current_longest_substring = substring
+  return len(current_longest_substring)
+
+print longest_substring_with_k_distinct_characters('aabcdefff', 3)
+# 5 (because 'defff' has length 5 with 3 characters)
+
+A more optimal solution is to use a running window. We use a dict ionary for mapping characters to the index of their last occurrence. While iterating, if the size of the dictionary exceeds k, our window is too big, so we remove the smallest item from the dictionary and figure out the new lower bound.
+
+def longest_substring_with_k_distinct_characters(s, k):
+  if k == 0:
+    return 0
+  bounds = (0, 0)
+  h = {}
+  max_length = 0
+  for i, char in enumerate(s):
+    h[char] = i
+
+    # Determine the lower bound.
+    if len(h) <= k:
+      new_lower_bound = bounds[0]  # lower bound remains the same
+    else:
+      # otherwise, pop last occurring char
+      key_to_pop = min(h, key=h.get)
+      new_lower_bound = h.pop(key_to_pop) + 1
+
+    bounds = (new_lower_bound, bounds[1] + 1)
+    max_length = max(max_length, bounds[1] - bounds[0])
+
+  return max_length
+
+print longest_substring_with_k_distinct_characters('aabcdefff', 3<
+ /span>)
+# 5 (because 'defff' has length 5 with 3 characters)
+
+This solution has a time complexity of O(N*k). N for iterating through the string, and k for figuring out the new lowerbound when the dictionary gets too large. The space complexity is O(k) for the dictionary.
