@@ -1,0 +1,44 @@
+The brute force solution is to traverse the tree, and for each node, check if its a unival tree by checking all of its children. This has a time complexity of O(N^2), since for each node you must traverse all subnodes.
+
+However we can improve this using a recursive algorithm where we start the check at the leaves, and keep track of the unival subtree count as the recursion percolates up to the root. This means we are only hitting each node once, making the runtime O(N).
+
+The space-complexity here is O(n) since the recursion stack length may grow to the size of the tree.
+
+class Node(object):
+  def __init__(self, val):
+    self.val = val
+    self.left
+  = None
+    self.right = None
+
+def count_unival_subtrees(root):
+  count, _ = count_unival_subtrees_helper(root)
+  return count
+
+def count_unival_subtrees_helper(root):
+  if root is None:
+    return 0, True
+
+  left_count, is_left_unival = count_unival_subtrees_helper(root.left)
+  right_count, is_right_unival = count_unival_subtrees_helper(root.right)
+  total_count = left_count + right_count
+
+  if is_left_unival and is_right_unival:
+    if root.left is not None and root.val != root.left.val:
+      return total_count, False
+    if root.right is not None and root.val != root.right.val:
+      return total_count, False
+    return total_count + 1, True
+  return total_count, False
+
+a = Node(0)
+a.left = Node(1)
+a.right = Node(0)
+a.right.left = Node(1)
+a.right.right = Node(0)
+a.right.left.left = Node
+ (1)
+a.right.left.right = Node(1)
+
+print count_unival_subtrees(a)
+# 5
