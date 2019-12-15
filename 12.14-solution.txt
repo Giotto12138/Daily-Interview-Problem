@@ -1,0 +1,56 @@
+A rather straight forward solution is a two-pass algorithm using counting sort.
+First, iterate the array counting number of 0's, 1's, and 2's, then overwrite array with total number of 0's, then 1's and followed by 2's. This uses two passes in linear time, with a hashmap of size O(k) where k is the number of colors (ie., 3).
+
+In the second solution, we do a single-pass algorithm in which we maintain two pointers -- the left pointer and the right pointer. These pointers act as boundaries between the 3 colors. When we find a color for "0", we swap it with the left pointer and move the pointer by one. The same applies for the color "2". At the end of the iteration, we'd have sorted the colors in a single pass (linear time) in constant O(k) space.
+
+class Solution:
+  def sortColors(self, nums):
+    color_dict = {}
+    for num in nums:
+      assert num in (0, 1, 2)  # make sure num is valid
+      if num in color_dict:
+        color_dict[num] += 1
+      else:
+        color_dict[num] = 1
+
+    idx = 0
+    for i in range(color_dict[0]):
+      nums[idx] = 0
+      idx += 1
+    for i in range(color_dict[1]):
+      nums[idx] = 1
+      idx += 1
+    for i in range(color_dict[2]):
+      nums[idx] = 2
+      idx += 1
+
+
+class Solution2:
+  def sortColors(self, nums):
+    p0 = curr = 0
+    p2 = len(nums) - 1
+
+    while curr <= p2:
+      if nums[curr] == 0:
+        # swap p0 with curr
+        nums[p0], nums[curr] = nums[curr], nums[p0]
+        p0 += 1
+        curr += 1
+      eli
+ f nums[curr] == 2:
+        # swap p2 with curr
+        nums[curr], nums[p2] = nums[p2], nums[curr]
+        p2 -= 1
+      else:
+        curr += 1
+
+
+nums = [0, 1, 2, 2, 1, 1, 2, 2, 0, 0, 0, 0, 2, 1]
+print("Before Sort: ")
+print(nums)# [0, 1, 2, 2, 1, 1, 2, 2, 0, 0, 0, 0, 2, 1]
+
+Solution2().sortColors(nums)
+print("After Sort: ")
+print(nums)
+# [0, 0, 0, 0, 0, 
+ 1, 1, 1, 1, 2, 2, 2, 2, 2]
