@@ -1,0 +1,25 @@
+A mapping can be created for each character to order number, and then for each word we will convert it to a list of character ordering. So suppose we have an alphabet of "abcde", the word "ace" will be converted to [0, 2, 4]. Then all we have to do is compare for each word in the list whether their lettering index is in increasing order.
+
+The time complexity of this problem is O(nm), where n is the number of words, and m is the length of the longest word, as we do work through every character of every word.
+
+def isSorted(words, order):
+  order_mapping = {char: idx for idx, char in enumerate(order)}
+  if len(words) <= 1:
+    return True
+
+  last_word = [order_mapping[c] for c in words[0]]
+
+  for word in words[1:]:
+    new_word = [order_mapping[c] for c in word]
+    if last_word > new_word:
+      return False
+    last_word = new_word
+  return True
+
+
+print isSorted(["abcd", "efgh"], "zyxwvutsrqponmlkjihgfedcba")
+# False
+print isSorted([&qu
+ ot;zyx", "zyxw", "zyxwy"],
+               "zyxwvutsrqponmlkjihgfedcba")
+# True
