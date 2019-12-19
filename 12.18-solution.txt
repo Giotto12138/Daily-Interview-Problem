@@ -1,0 +1,109 @@
+There are two possible solutions to this problem.
+
+Solution 1: Depth first search. We treat the grid as an undirected graph and run depth first search. Adjacent land blocks have an edge between them. We begin by linearly traversing the graph. Any time we see a 1, the land block sets off a depth first search and increments a counter. The DFS marks all adjacent land blocks as visited, and we continue traversing the graph until all land has been visited.
+
+This solution takes O(M x N) time, where M is the number of rows and N is the number of columns. It takes O(M x N) space because in the worst case where the graph is entirely made up of land blocks and where the DFS goes M x N deep.
+
+class Solution(object):
+  def inRange(self, grid, r, c):
+  
+   numRow, numCol = len(grid), len(grid[0])
+    if r < 0 or c < 0 or r >= numRow or c >= numCol:
+      return False
+    return True
+  # Computes the number of islands using
+  # a depth fir
+ st search.
+
+  def numIslandsDFS(self, grid):
+    if not grid or not grid[0]:
+      return 0
+    rows, columns = len(grid), len(grid[0])
+    count = 0
+    for i in range(rows):
+      for j in range(columns):
+        # if we find a land block, run dfs
+        # starting at this block.
+        if grid[i][j] == 1:
+          self.dfs(grid, i, j)
+          count += 1
+    return count
+
+  # Helper function that runs depth first search.
+  def dfs(self, grid, currRow, currCol):
+    # Mark the current row/column pair as visited.
+    grid[currRow][currCol] = 2
+    directions = [(0, 1), (0, -1), (-1, 0), (1, 0)]
+    for d in directions:
+      nextRow, nextCol = currRow + d[0], currCol + d[1]
+      if self.
+ inRange(grid, nextRow, nextCol) and grid[nextRow][nextCol] == 1:
+        self.dfs(grid, nextRow, nextCol)
+
+
+# Test Program
+# Number of islands should be 3
+grid = [[1, 1, 0, 0, 0],
+        [0, 1, 0, 0, 1],
+        [1, 0, 0, 1, 1],
+        [0, 0, 0, 0, 0]]
+print(Solution().numIslandsDFS(grid))
+# 3
+
+Solution 2: Breadth First Search. Linearly traverse the graph. Any time we see a land block, we enter a breadth first search, which enqueues the block, marks it as visited, and searches all of its neighbors. When the queue is empty, it means that there were no more land blocks of neighbors and we have found and marked the entire island.
+
+This solution takes O(M x N) time, where M is the number of rows and N is the number of columns. The space complexity is O(min(M, N)), because the queue could be as long as min(M, N) in the worst case where the graph is entirely made of land blocks.
+
+class Solution(object):
+  def inRange(self, grid, r, c):
+    numRow, numCol = len(grid), len(grid[0])
+    if r < 0 or c < 0 or r >= numRow or c >= numCol:
+      return False
+    return True
+
+  # Counts the number of islands using
+  # a breadth first search.
+  def numIslandsBFS(self, grid):
+    """
+    :type grid: List[List[int]]
+    :rtype: int
+    """
+    if not grid or not grid[0]:
+      return 0
+    rows, columns = len(grid), len(grid[0])
+    count = 0
+    for i in range(rows):
+      for j in range(columns):
+        if grid[i][j] == 1:
+          self.bfs(grid, i, j)
+          count += 1
+    return count
+
+  # Runs breadth first search on the current
+  # row and colum
+ n.
+  def bfs(self, grid, currRow, currCol):
+    queue = []
+    queue.append((currRow, currCol))
+    # mark current vertex as visited
+    grid[currRow][currCol] = 2
+    while queue:
+      directions = [(0, 1), (0, -1), (-1, 0), (1, 0)]
+      currRow, currCol = queue.pop()
+      for d in directions:
+        nextRow, nextCol = currRow + d[0], currCol + d[1]
+        if self.inRange(grid, nextRow, nextCol) and grid[nextRow][nextCol] == 1:
+          queue.append((nextRow, nextCol))
+          # mark next vertex and column as visited so
+          # we don't double count
+          grid[nextRow][nextCol] = 2
+
+
+# Test Program
+# Number of islands should be 3
+grid = [[1, 1, 0, 0, 0],
+        [0, 1, 0, 0, 1],
+        [1, 0, 0, 1, 1],
+        [0, 0, 0, 0, 0]]
+print(Solution().numIslandsBFS(grid))
+# 3
