@@ -1,0 +1,24 @@
+In order to arrive to a solution, the first step is to understand what it means for a string to be valid. A string is valid if for each closing bracket, there exists an unused opening bracket to its left, and the number of opening brackets must equal the number of closing brackets. Then, to determine the minimum number of removals we simply need to iterate through the string, while keeping a count of the number of invalid parentheses we have encountered so far, and the number of unused open parenthesis in the string so far. Anytime we encounter an open parenthesis, increment the opened count. Anytime we encounter a closing parenthesis, decrement the opened count if opened > 0, otherwise increment the invalid count.
+
+def count_invalid_parenthesis(string):
+  opened = 0
+  invalid = 0
+  for c in string:
+    if c == '(&#
+ 39;:
+      opened += 1
+    elif c == ')':
+      if opened > 0:
+        opened -= 1
+      else:
+        invalid += 1
+  # Count as invalid all unclosed parenthesis
+  invalid += opened
+  return invalid
+
+print count_invalid_parenthesis("()())()")
+# 1
+<
+ /pre>
+
+This has a time complexity of O(N) since we are iterating through the string once. It has a constant space complexity of O(1).
