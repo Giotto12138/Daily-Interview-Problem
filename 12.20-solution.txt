@@ -1,0 +1,39 @@
+The idea behind this question is that we are grouping words with the same sorted letters. So we can solve this by sorting every word by its letters, and then put them all in a map. The values of the map is then the answer to the problem.
+
+The time complexity of this solution is O(n mlogm), where n is the length of each word, and m is the length of each string as we are sorting it.
+
+The space complexity of this solution is O(nm) as each word is stored in a map.
+
+import collections
+
+def groupAnagramWords(strs):
+  groups = collections.defaultdict(list)
+  for s in strs:
+    groups["".join(sorted(s))].append(s)
+  return list(groups.values())
+
+print groupAnagramWords(['abc', 'bcd', 'cba', 'cbd', 'efg'])
+# [['bcd', 'cbd'], ['abc', 'cba'], ['efg']]
+
+Solution 2:
+
+Since we know there will be a maximum of 26 characters, we can get the count of all characters in a tuple instead and save that as the key of the map.
+
+import collections
+
+def groupAnagramWords(strs):
+  groups = collections.defaultdict(lis
+ t)
+  for s in strs:
+    char_count = [0] * 26
+    for c in s:
+      char_count[ord(c) - ord('a')] += 1
+    groups[tuple(char_count)].append(s)
+  return list(groups.values())
+
+print groupAnagramWords(['abc', 'bcd', 'cba', 'cbd', 'efg'])
+# [['efg'], ['bcd', 'cbd'], ['abc', 'cba']]
+
+The time complexity of this solution is O(nm), where n is the size of the list, and m is the length of the longest string.
+
+The space complexity of this solution is O(nm), since all words are stored in a map.
