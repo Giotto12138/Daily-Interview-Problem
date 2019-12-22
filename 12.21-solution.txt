@@ -1,0 +1,59 @@
+The solution to this problem requires the use of 2 heaps. A max-heap that will hold all the elements smaller than the median, and a min-heap that will hold all the elements bigger than the median. Therefore, the median will always be at the top of one or both of the heaps.
+
+When we have a new element in the stream, we first add it to the appropriate heap depending on if it is bigger or smaller than the current median (if it's the first element or equal to the median, we can put it in either one). If the difference between the size of the 2 heaps is more than 1, we rebalance by moving the root of the larger heap to the smaller heap. Then, our current median is simply the root of the larger heap, or the average of both heaps if they're the same size.
+
+For a min-heap, we can use Python's heapq.
+For a max-heap, we also use Python's heapq but we just use negative numbers instead. (The implementation of the heap can also just be assumed to exist often, so you don't have to necessarily worry about that exact implementation).
+
+import heapq
+
+def get_median(min_heap, max_heap):
+  if len(min_heap) > len(max_heap):
+    return min_heap[0]
+  elif len(min_heap) < len(max
+ _heap):
+    return -max_heap[0]
+  else:
+    min_root = min_heap[0]
+    max_root = -max_heap[0]
+    return (min_root + max_root) / 2.0
+
+def add(num, min_heap, max_heap):
+  if len(min_heap) + len(max_heap) <= 1:
+    heapq.heappush
+ (max_heap, -num)
+    return
+
+  median = get_median(min_heap, max_heap)
+  if num > median
+ :
+    heapq.heappush(min_heap, num)
+  else:
+    heapq.heappush(max_heap, -num)
+
+def rebalance(min_heap, max_heap):
+  if len(min_heap) > len(max_heap) +<
+ /span> 1:
+    root = heapq.heappop(min_heap)
+    heapq.heappush(max_heap, -root)
+  elif len(max_heap) > len(min_heap) + 1:
+    root = -heapq.heappop(max_heap)
+    heapq.heappush(min_heap, root)
+
+def print_median(min_heap, max_heap):
+  print <
+ span style="color: #000000">get_median(min_heap, max_heap),
+
+def running_median(stream):
+  min_heap = []
+  max_heap = []
+
+  for num in stream:
+    add(num, min_heap, max_heap)
+    rebalance(min_heap, max_heap)
+    print_median(min_heap, max_heap)
+
+running_median([2, 1, 4, 7, 2, 0, 5])
+# 2 1.5 2 3.0 2 2.0 2
+
+The solution has a time complexity of O(N log N) because for each new element in the stream, we need to insert into the heap which is log N for rebalancing. The space complexity is O(N), because we need to store all the elements in the stream in the heaps. 
