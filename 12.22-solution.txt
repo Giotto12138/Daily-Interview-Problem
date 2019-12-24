@@ -1,0 +1,47 @@
+The first step to reaching a solution is to realize that the number of rooms that are required to is simply the maximum number of intervals that overlap at any given time. Then, the brute force solution is to simply use a nested loop that finds the number of overlapping intervals for each interval, and keeps track of the largest number.
+
+def overlaps(a, b):
+  start_a, end_a = a
+  start_b, end_b = b
+  return not (end_a < start_b or start_a > end_b)
+
+def max_overlapping(intervals):
+  current_max = 0
+  for interval in intervals:
+    num_overlapping = sum(overlaps(interval, other_interval)
+                          for other_interval in intervals
+                          if interval is not other_interval)
+    current_max = max(current_max, num_overlapping)
+  return current_max
+
+print max_overlapping([(30, 75), (0, 50), (60, 150)])
+# 2
+
+However, the time complexity here is O(N^2) due to the nested loop.
+
+The more optimal solution is to create two lists, one where the intervals are sorted by start time, and one where they are sorted by end time. Then initialize a pointer to the start of each list. If current start is before current end, then there is a new overlap, so increase the start time pointer. Otherwise, an overlap ended, so increase the end time pointer. While doing this, simply keep track of the maximum number of overlaps seen so far and return it and the end.
+
+< div style="background: #f8f8f8; overflow:auto;width:auto;border-width:.1em .1em .1em .8em;padding:.2em .6em;">
+def max_overlapping(intervals):
+  starts = sorted(start for start, end in int
+ ervals)
+  ends = sorted(end for start, end in intervals)
+
+  current_max = 0
+  current_overlap = 0
+  i, j = 0, 0
+  while i < len(intervals) and j < len(intervals):
+    if starts[i] < ends[j]:
+      current_overlap += 1
+      current_max = max(current_max, current_overlap)
+      i += 1
+    else:
+      current_overlap -= 1
+      j += 1
+  return current_max
+
+print max_overlapping([(30, 75), (0, 50), (60, 150)])
+# 2
+
+This solution now has a time complexity of O(N log N) due to the sorting.
+ 
