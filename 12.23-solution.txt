@@ -1,0 +1,19 @@
+Split the word by spaces, and then iterate through reversing each word.
+This can be done like so:
+
+class Solution:
+  def reverseWords(self, str):
+    words = str.split(" ")
+    reverse=''
+    for word in words:
+      word = word[::-1]
+      if reverse =='':
+        reverse = word
+      else:
+        reverse = reverse +" "+word
+    return reverse 
+
+print Solution().reverseWords("The cat in the hat")
+# ehT tac ni eht tah
+
+The split takes linear time in a single pass. Then we iterate through each word and reverse them -- this is also in linear time. We're using linear space for storing the array of words.
