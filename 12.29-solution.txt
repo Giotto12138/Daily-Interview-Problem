@@ -1,0 +1,38 @@
+The solution to this problem is a simple recursive approach. For a given node, if it is an operation, we recursively evaluate the left and right subtree, apply the operator on the results, and return that value. Otherwise, if the value is an integer, we simply return that integer.
+
+class Node:
+  def __init__(self, val, left=None, right=None):
+    self.val = val
+    self.left = left
+    self.right = right
+
+PLUS = "+"
+MINUS = "-"
+TIMES = "*"
+DIVIDE = "/"
+
+def evaluate(root):
+  if root.val == PLUS:
+    return evaluate(root.left) + evaluate(root.right)
+  elif root.val == MINUS:
+    return evaluate(root.left) - evaluate(root.right)
+  elif root.val == TIMES:
+    return evaluate(root.left) * evaluate(root.right)
+  elif root.val == DIVIDE:
+    return evaluate(root.left) / evaluate(root.right)
+  else:
+    return root.val
+
+
+tree = Node(TIMES)
+tree.left = Node(PLUS)
+tree.left.left = Node(3)
+tree.left.right = Node(2)
+tree.right = Node(PLUS)
+tree.right.left = Node(4)
+tree.right.right = Node(5)
+print evaluate(tree
+ )
+# 45
+
+The time complexity of the solution is O(N) because in the recursion, we hit every node, at most once. The space complexity is on average O(log N), because that is the max depth of our recursion stack.
